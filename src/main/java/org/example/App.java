@@ -55,6 +55,13 @@ public class App {
                     }
                     break;
 
+                case "5":
+                    if (priserInmatade) {
+                        visualisering();
+                    } else {
+                        System.out.println("Du måste först mata in elpriser.\n");
+                    }
+
                 case "e":
                     break;
 
@@ -142,6 +149,49 @@ public class App {
         System.out.printf("Medelpris 4h: %.1f öre/kWh\n", averagePrice);
     }
 
+    public static void visualisering() {
+        int maxPrice = Integer.MIN_VALUE;
+        int minPrice = Integer.MAX_VALUE;
+
+        for (int price : elpriser) {
+            if (price > maxPrice) {
+                maxPrice = price;
+            }
+            if (price < minPrice) {
+                minPrice = price;
+            }
+        }
+
+        int graphHeight = 5;
+        int priceRange = maxPrice - minPrice;
+
+        for (int i = graphHeight; i >= 0; i--) {
+            int currentLevelPrice = minPrice + (priceRange * i / graphHeight);
+            if (i == 5) System.out.printf("%3d|", maxPrice);
+            else if (i == 0) System.out.printf("%3d|", minPrice);
+            else System.out.print("   |");
+            for (int price : elpriser) {
+                if (price >= currentLevelPrice) {
+                    System.out.print("  x");
+                } else {
+                    System.out.print("   ");
+                }
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("   |");
+        for (int hour = 1; hour <= 24; hour++) {
+            System.out.print("---");
+        }
+        System.out.print("\n");
+
+        System.out.print("   |");
+        for (int hour = 0; hour < 24; hour++) {
+            System.out.printf(" %02d", hour);
+        }
+        System.out.print("\n");
+    }
 
 }
 
