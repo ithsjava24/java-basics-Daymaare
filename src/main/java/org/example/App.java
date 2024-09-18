@@ -1,6 +1,6 @@
 package org.example;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -8,6 +8,7 @@ public class App {
     static boolean priserInmatade = false;
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.of("SV", "se"));
         Scanner scanner = new Scanner(System.in);
         String choice;
 
@@ -38,7 +39,11 @@ public class App {
                     break;
 
                 case "3":
-
+                    if (priserInmatade) {
+                        Sortera();
+                    } else {
+                        System.out.println("Du måste först mata in elpriser.\n");
+                    }
                     break;
 
                 case "4":
@@ -78,14 +83,14 @@ public class App {
         }
 
         double medel = sum / 24.0;
-        System.out.printf("\nLägsta pris: %02d-%02d, %d öre/kWh", minTimme, (minTimme +1), min);
-        System.out.printf("\nHögsta pris: %02d-%02d, %d öre/kWh", maxTimme, (maxTimme +1), max);
+        System.out.printf("\nLägsta pris: %02d-%02d, %d öre/kWh", minTimme, (minTimme + 1), min);
+        System.out.printf("\nHögsta pris: %02d-%02d, %d öre/kWh", maxTimme, (maxTimme + 1), max);
         System.out.printf("\nMedelpris: %.2f öre/kWh\n", medel);
     }
 
 
     public static void inmatning(Scanner scanner) {
-        System.out.println("Mata in elpriser (i hela ören) för varje timme (00-01, 01-02, ... 23-24):");
+        System.out.println("\nMata in elpriser (i hela ören) för varje timme (00-01, 01-02, ... 23-24):");
         for (int i = 0; i < 24; i++) {
             System.out.println("Timme " + i + "-" + (i + 1) + ": ");
             while (!scanner.hasNextInt()) {
@@ -96,6 +101,21 @@ public class App {
         }
         priserInmatade = true;
         scanner.nextLine();
+    }
+
+    public static void Sortera() {
+        List<String[]> priceTimePairs = new ArrayList<>();
+
+        for (int i = 0; i < elpriser.length; i++) {
+            priceTimePairs.add(new String[]{String.format("%02d-%02d", i, (i + 1)), String.valueOf(elpriser[i])});
+
+        }
+
+        priceTimePairs.sort((pair1, pair2) -> Integer.compare(Integer.parseInt(pair2[1]), Integer.parseInt(pair1[1])));
+
+        for (String[] pair : priceTimePairs) {
+            System.out.printf("%s %s öre\n", pair[0], pair[1]);
+        }
     }
 
 }
