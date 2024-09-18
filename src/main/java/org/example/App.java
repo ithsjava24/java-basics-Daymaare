@@ -20,6 +20,7 @@ public class App {
                     2. Min, Max och Medel
                     3. Sortera
                     4. Bästa Laddningstid (4h)
+                    5. Visualisering
                     e. Avsluta
                     """);
 
@@ -47,7 +48,11 @@ public class App {
                     break;
 
                 case "4":
-
+                    if (priserInmatade) {
+                        BestLoadTimes();
+                    } else {
+                        System.out.println("Du måste först mata in elpriser.\n");
+                    }
                     break;
 
                 case "e":
@@ -88,7 +93,6 @@ public class App {
         System.out.printf("\nMedelpris: %.2f öre/kWh\n", medel);
     }
 
-
     public static void inmatning(Scanner scanner) {
         System.out.println("\nMata in elpriser (i hela ören) för varje timme (00-01, 01-02, ... 23-24):");
         for (int i = 0; i < 24; i++) {
@@ -118,7 +122,27 @@ public class App {
         }
     }
 
-}
+    public static void BestLoadTimes() {
+        int bestStartHour = 0;
+        int minCost = Integer.MAX_VALUE;
 
+        for (int i = 0; i <= elpriser.length - 4; i++) {
+            int currentCost = 0;
+            for (int j = i; j < i + 4; j++) {
+                currentCost += elpriser[j];
+            }
+            if (currentCost < minCost) {
+                minCost = currentCost;
+                bestStartHour = i;
+            }
+        }
+
+        double averagePrice = minCost / 4.0;
+        System.out.printf("\nPåbörja laddning klockan %02d\n", bestStartHour);
+        System.out.printf("Medelpris 4h: %.1f öre/kWh\n", averagePrice);
+    }
+
+
+}
 
 
