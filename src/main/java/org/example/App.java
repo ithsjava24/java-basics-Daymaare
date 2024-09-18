@@ -22,7 +22,7 @@ public class App {
                     e. Avsluta
                     """);
 
-            choice = scanner.nextLine();
+            choice = scanner.nextLine().toLowerCase();
 
             switch (choice) {
                 case "1":
